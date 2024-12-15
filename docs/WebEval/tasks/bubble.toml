@@ -1,0 +1,86 @@
+[preprocessor]
+vect_10 = "[random.randint(0, 100) for _ in range(10)]"
+vect_10_s = "sorted(vect_10)"
+vect_100_l = "[random.randint(5000, 10000) for _ in range(100)]"
+vect_100_l_s = "sorted(vect_100_l)"
+vect_23 = "[random.randint(0, 50) for _ in range(23)]"
+vect_23_s = "sorted(vect_23)"
+
+[task]
+name = "Bubble Sort"
+template = "S_templates/bubble.S"
+
+description = '''
+# Bubble Sort.
+**Write a program that sorts an array using bubble sort algorithm.**
+
+The size of the array will be located at the address `array_size`, the integer array (32-bit integer words) will start
+at the address `array_start`.
+
+The program should sort the array in ascending order.
+'''
+
+[arguments]
+run = "--dump-cycles --cycle-limit 100000"
+
+[[inputs]]
+data_in = "Size of the array located at address array_size, the array start is located at the address array_start."
+data_out = "Sorted array of length array_size"
+description = "Cache optimized sorting."
+
+[[testcases]]
+name = "5 elements"
+
+[[testcases.starting_mem]]
+array_size = [5]
+array_start = [1, 3, 4, 5, 2]
+
+[[testcases.reference_mem]]
+array_start = [1, 2, 3, 4, 5]
+
+[[testcases]]
+name = "10 elements"
+
+[[testcases.starting_mem]]
+array_size = [10]
+array_start = "{{$vect_10$}}"
+
+[[testcases.reference_mem]]
+array_start = "{{$vect_10_s$}}"
+
+[[testcases]]
+name = "100 elements (random vector with large numbers)"
+
+[[testcases.starting_mem]]
+array_size = [100]
+array_start = "{{$vect_100_l$}}"
+
+[[testcases.reference_mem]]
+array_start = "{{$vect_100_l_s$}}"
+
+[[testcases]]
+name = "private"
+private = true
+
+[[testcases.starting_mem]]
+array_size = [23]
+array_start = "{{$vect_23$}}"
+
+[[testcases.reference_mem]]
+array_start = "{{$vect_23_s$}}"
+
+[[testcases]]
+name = "scoring testcase"
+private = true
+
+[[testcases.starting_mem]]
+array_size = [4]
+array_start = [4, 3, 2, 1]
+
+[[testcases.reference_mem]]
+array_start = [1, 2, 3, 4]
+
+
+[score]
+description = "Runtime of the program in cycles."
+testcase = "scoring testcase"
